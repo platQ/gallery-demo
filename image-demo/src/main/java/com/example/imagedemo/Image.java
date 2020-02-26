@@ -33,9 +33,10 @@ public class Image {
     private byte[] pic;
 
     //Custom Construtor
-    public Image(String name, String type, byte[] pic) {
+    public Image(String name, String type, byte[] pic, User user) {
         this.name = name;
         this.type = type;
         this.pic = pic;
+        this.user = user;
     }
 }

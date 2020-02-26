@@ -1,10 +1,12 @@
 package com.example.imagedemo;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,6 +14,8 @@ import sun.security.util.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -26,6 +30,18 @@ public class ImageController {
     @RequestMapping(value={"/upload"}, method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
     public ModelAndView upload() {
         ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+
+        List<Image> images = imageService.findAllByUser(user);
+
+        List<String> imageStrings = new ArrayList<String>();
+
+        for (Image image : images) {
+            imageStrings.add(Base64.encodeBase64String(image.getPic()));
+        }
+
+        modelAndView.addObject("images", imageStrings);
 
         modelAndView.setViewName("upload");
         return modelAndView;
@@ -54,5 +70,4 @@ public class ImageController {
 
         return image.getPic();
     }
-
 }

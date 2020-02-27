@@ -3,19 +3,21 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Spring Security Tutorial</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}"/>
+    <title>My Galleries</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link th:href="@{/MyCSS.css}" href="/MyCSS.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container">
     <table>
         <thead>
-                <tr>
-                    <th> Galleries </th>
-                </tr>
-            </thead>
+            <tr>
+                <th>My Galleries</th>
+            </tr>
+        </thead>
         <tbody>
             <tr th:if="${galleries.empty}">
                 <td colspan="2"> No Images Available </td>
@@ -24,6 +26,7 @@
                 <td><a th:href="@{/mygallery/{gallery}(gallery = ${gallery})}" th:text="${gallery}"></a></td>
             </tr>
         </tbody>
-</table>
+    </table>
+</div>
 </body>
 </html>

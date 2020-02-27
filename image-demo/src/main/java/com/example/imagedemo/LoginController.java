@@ -2,6 +2,7 @@ package com.example.imagedemo;
 
 import javax.validation.Valid;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,15 +12,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 public class LoginController {
 
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ImageService imageService;
+
     @RequestMapping(value={"/home"}, method = RequestMethod.GET)
     public ModelAndView hello() {
         ModelAndView modelAndView = new ModelAndView();
+        List<Image> images = imageService.findAll();
+        List<String> galleryStrings = new ArrayList<String>();
+
+        for (Image image : images) {
+            String gallery = image.getGallery();
+
+            if (!galleryStrings.contains(gallery)) {
+                galleryStrings.add(gallery);
+            }
+        }
+
+        modelAndView.addObject("galleries", galleryStrings);
         modelAndView.setViewName("home");
         return modelAndView;
     }

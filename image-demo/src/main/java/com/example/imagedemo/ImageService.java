@@ -30,4 +30,8 @@ public class ImageService {
     public Image saveImage(Image image) {
         return imageRepository.save(image);
     }
+
+    public List<Image> findAll() {
+        return imageRepository.findAll();
+    }
 }

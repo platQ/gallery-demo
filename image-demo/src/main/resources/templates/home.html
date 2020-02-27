@@ -2,9 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head>
-        <title>Hello World!</title>
+        <title>Home</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link th:href="@{/MyCSS.css}" href="/MyCSS.css" rel="stylesheet" type="text/css" />
     </head>
-    <body>
-        <p>Hello!</p>
+    <body class="container">
+        <div th:replace="fragments/navbar :: navbar"></div>
+        <table>
+            <thead>
+                    <tr>
+                        <th>All Galleries</th>
+                    </tr>
+                </thead>
+            <tbody>
+                <tr th:if="${galleries.empty}">
+                    <td colspan="2"> No Images Available </td>
+            </tr>
+                    <tr th:each="gallery : ${galleries}">
+                <td><a th:href="@{/mygallery/{gallery}(gallery = ${gallery})}" th:text="${gallery}"></a></td>
+                    </tr>
+            </tbody>
+        </table>
     </body>
 </html>

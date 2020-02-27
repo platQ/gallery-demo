@@ -48,7 +48,7 @@ public class ImageController {
         return modelAndView;
     }
 
-    @RequestMapping(value={"/mygallery"}, method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    @RequestMapping(value={"/mygallery"}, method = RequestMethod.GET)
     public ModelAndView showGallery() {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -66,8 +66,6 @@ public class ImageController {
         }
 
         modelAndView.addObject("galleries", galleryStrings);
-
-
         modelAndView.setViewName("mygallery");
         return modelAndView;
     }

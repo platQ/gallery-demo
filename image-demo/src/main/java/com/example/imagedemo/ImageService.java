@@ -38,4 +38,8 @@ public class ImageService {
     public List<Image> findAll() {
         return imageRepository.findAll();
     }
+
+    public void delete(Image image) {
+        imageRepository.delete(image);
+    }
 }

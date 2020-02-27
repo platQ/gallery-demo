@@ -17,6 +17,12 @@
     <div class="row">
         <a th:href="@{/photo/{name}(name = ${name})}" th:text="${name}"></a>
         <img th:src="*{'data:image/png;base64,'+image}" alt="" />
+
+
+        <form th:action="@{/photo/{name}/delete(name = ${name})}" method="POST">
+            <button class="btn btn-lg btn-primary btn-block" name="Submit" type="Submit"
+                    th:text="Delete"></button>
+        </form>
     </div>
 </div>
 </body>

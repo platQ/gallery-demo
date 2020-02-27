@@ -90,4 +90,31 @@ public class ImageController {
 
         return "photo/name";
     }
+
+    @RequestMapping(value = "/photo/{name}/delete", method = RequestMethod.POST)
+    public ModelAndView deleteImage(@PathVariable String name) {
+        ModelAndView modelAndView = new ModelAndView();
+        Image image = imageService.findByName(name);
+
+        imageService.delete(image);
+
+        //reroute back to the galleries... im not happy about doing this
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+
+        List<Image> images = imageService.findAllByUser(user);
+        List<String> galleryStrings = new ArrayList<String>();
+
+        for (Image image1 : images) {
+            String gallery = image1.getGallery();
+
+            if (!galleryStrings.contains(gallery)) {
+                galleryStrings.add(gallery);
+            }
+        }
+
+        modelAndView.addObject("galleries", galleryStrings);
+        modelAndView.setViewName("mygallery");
+        return modelAndView;
+    }
 }

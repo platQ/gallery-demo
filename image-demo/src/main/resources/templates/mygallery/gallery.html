@@ -8,25 +8,28 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link th:href="@{/MyCSS.css}" href="/MyCSS.css" rel="stylesheet" type="text/css" />
+    <style>
+img {
+  border: 1px solid #ddd; /* Gray border */
+  border-radius: 4px;  /* Rounded border */
+  padding: 5px; /* Some padding */
+  width: 150px; /* Set a small width */
+}
+
+/* Add a hover effect (blue shadow) */
+img:hover {
+  box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+</style>
 </head>
 <body>
 <div th:replace="fragments/navbar :: navbar"></div>
 <div class="container">
-    <table>
-        <thead>
-            <tr>
-                <th> Gallery </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:if="${images.empty}">
-                <td colspan="2"> No Images Available </td>
-            </tr>
-            <tr th:each="image : ${images}">
-                <td><img th:src="*{'data:image/png;base64,'+image}" alt="" /></td>
-            </tr>
-        </tbody>
-    </table>
+    <p th:each="entry : ${imageMap}" >
+        <a th:href="@{/photo/{name}(name = ${entry.key})}">
+            <img th:src="*{'data:image/png;base64,'+entry.value}" alt=""/>
+        </a>
+    </p>
 </div>
 </body>
 </html>

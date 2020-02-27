@@ -19,6 +19,10 @@ public class ImageService {
         return imageRepository.findByUser(user);
     }
 
+    public Image findByName(String name) {
+        return imageRepository.findByName(name);
+    }
+
     public List<Image> findAllByGallery(String gallery) {
         return imageRepository.findAllByGallery(gallery);
     }

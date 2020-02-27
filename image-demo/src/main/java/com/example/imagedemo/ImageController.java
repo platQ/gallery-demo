@@ -12,10 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class ImageController {
@@ -74,25 +71,23 @@ public class ImageController {
     public String showSingleGallery(@PathVariable String gallery, Model model) {
 
         List<Image> images = imageService.findAllByGallery(gallery);
-        List<String> imageStrings = new ArrayList<String>();
+        Map<String, String> nameStringMap = new HashMap<>();
 
         for (Image image : images) {
-            imageStrings.add(Base64.encodeBase64String(image.getPic()));
+            nameStringMap.put(image.getName(), Base64.encodeBase64String(image.getPic()));
         }
 
-        model.addAttribute("images", imageStrings);
+        model.addAttribute("imageMap", nameStringMap);
 
         return "mygallery/gallery";
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/photo/test", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
-    public byte[] showImage() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUserName(auth.getName());
+    @RequestMapping(value = "/photo/{name}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    public String showImage(@PathVariable String name, Model model) {
+        Image image = imageService.findByName(name);
 
-        Image image = imageService.findImageByUser(user);
+        model.addAttribute("image", Base64.encodeBase64String(image.getPic()));
 
-        return image.getPic();
+        return "photo/name";
     }
 }

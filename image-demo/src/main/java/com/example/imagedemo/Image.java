@@ -25,6 +25,9 @@ public class Image {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "gallery")
+    private String gallery;
+
     @ManyToOne
     private User user;
 
@@ -33,10 +36,11 @@ public class Image {
     private byte[] pic;
 
     //Custom Construtor
-    public Image(String name, String type, byte[] pic, User user) {
+    public Image(String name, String type, byte[] pic, User user, String gallery) {
         this.name = name;
         this.type = type;
         this.pic = pic;
         this.user = user;
+        this.gallery = gallery;
     }
 }

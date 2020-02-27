@@ -8,5 +8,6 @@ import java.util.List;
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
     Image findByUser(User user);
+    List<Image> findAllByGallery(String gallery);
     List<Image> findAllByUser(User user);
 }

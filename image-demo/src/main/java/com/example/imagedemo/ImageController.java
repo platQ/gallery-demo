@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import sun.security.util.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,37 +26,65 @@ public class ImageController {
     @Autowired
     private ImageService imageService;
 
-    @RequestMapping(value={"/upload"}, method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    @RequestMapping(value={"/upload"}, method = RequestMethod.GET)
     public ModelAndView upload() {
         ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUserName(auth.getName());
-
-        List<Image> images = imageService.findAllByUser(user);
-
-        List<String> imageStrings = new ArrayList<String>();
-
-        for (Image image : images) {
-            imageStrings.add(Base64.encodeBase64String(image.getPic()));
-        }
-
-        modelAndView.addObject("images", imageStrings);
 
         modelAndView.setViewName("upload");
         return modelAndView;
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ModelAndView uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
+    public ModelAndView uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("gallery") String gallery)
+            throws IOException {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUserName(auth.getName());
-        Image img = new Image( file.getOriginalFilename(),file.getContentType(),file.getBytes(), user);
+        Image img = new Image(file.getOriginalFilename(), file.getContentType(), file.getBytes(), user, gallery);
         imageService.saveImage(img);
 
         System.out.println("Image saved");
         modelAndView.setViewName("upload");
         return modelAndView;
+    }
+
+    @RequestMapping(value={"/mygallery"}, method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    public ModelAndView showGallery() {
+        ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+
+        List<Image> images = imageService.findAllByUser(user);
+        List<String> galleryStrings = new ArrayList<String>();
+
+        for (Image image : images) {
+            String gallery = image.getGallery();
+
+            if (!galleryStrings.contains(gallery)) {
+                galleryStrings.add(gallery);
+            }
+        }
+
+        modelAndView.addObject("galleries", galleryStrings);
+
+
+        modelAndView.setViewName("mygallery");
+        return modelAndView;
+    }
+
+    @RequestMapping(value={"/mygallery/{gallery}"}, method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    public String showSingleGallery(@PathVariable String gallery, Model model) {
+
+        List<Image> images = imageService.findAllByGallery(gallery);
+        List<String> imageStrings = new ArrayList<String>();
+
+        for (Image image : images) {
+            imageStrings.add(Base64.encodeBase64String(image.getPic()));
+        }
+
+        model.addAttribute("images", imageStrings);
+
+        return "mygallery/gallery";
     }
 
     @ResponseBody

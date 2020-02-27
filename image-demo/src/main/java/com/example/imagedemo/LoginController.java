@@ -17,10 +17,10 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value={"/hello"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/home"}, method = RequestMethod.GET)
     public ModelAndView hello() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("hello");
+        modelAndView.setViewName("home");
         return modelAndView;
     }
 
@@ -59,17 +59,4 @@ public class LoginController {
         }
         return modelAndView;
     }
-
-    @RequestMapping(value="/admin/home", method = RequestMethod.GET)
-    public ModelAndView home(){
-        ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUserName(auth.getName());
-        modelAndView.addObject("userName", "Welcome " + user.getUserName() + "/" + user.getName() + " " + " (" + user.getEmail() + ")");
-        modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
-        modelAndView.setViewName("admin/home");
-        return modelAndView;
-    }
-
-
 }

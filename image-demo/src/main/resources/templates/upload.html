@@ -11,26 +11,26 @@
 <body>
 <form method="POST" action="/upload" enctype="multipart/form-data">
     <input type="file" name="file" /><br/><br/>
+    <input type="text" name="gallery"/>
     <input type="submit" value="Submit" />
 </form>
 
-<p>images you previously uploaded</p>
-<table>
-    <thead>
-        <tr>
-            <th> Image </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:if="${images.empty}">
-            <td colspan="2"> No Images Available </td>
-        </tr>
-        <tr th:each="image : ${images}">
-<!--            <td><span th:text="${image.pic}"> Image </span></td>-->
-            <td><img th:src="*{'data:image/png;base64,'+image}" alt="" /></td>
-        </tr>
-    </tbody>
-</table>
+<!--<p>images you previously uploaded</p>-->
+<!--<table>-->
+<!--    <thead>-->
+<!--        <tr>-->
+<!--            <th> Image </th>-->
+<!--        </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--        <tr th:if="${images.empty}">-->
+<!--            <td colspan="2"> No Images Available </td>-->
+<!--        </tr>-->
+<!--        <tr th:each="image : ${images}">-->
+<!--            <td><img th:src="*{'data:image/png;base64,'+image}" alt="" /></td>-->
+<!--        </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
 
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Single Image</title>
     <!--    <link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}"/>-->
@@ -18,11 +18,12 @@
         <a th:href="@{/photo/{name}(name = ${name})}" th:text="${name}"></a>
         <img th:src="*{'data:image/png;base64,'+image}" alt="" />
 
-
-        <form th:action="@{/photo/{name}/delete(name = ${name})}" method="POST">
-            <button class="btn btn-lg btn-primary btn-block" name="Submit" type="Submit"
-                    th:text="Delete"></button>
-        </form>
+        <div>
+            <form th:action="@{/photo/{name}/delete(name = ${name})}" method="POST">
+                <button class="btn btn-lg btn-primary btn-block" name="Submit" type="Submit"
+                        th:text="Delete"></button>
+            </form>
+        </div>
     </div>
 </div>
 </body>

@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -92,29 +93,21 @@ public class ImageController {
     }
 
     @RequestMapping(value = "/photo/{name}/delete", method = RequestMethod.POST)
-    public ModelAndView deleteImage(@PathVariable String name) {
-        ModelAndView modelAndView = new ModelAndView();
-        Image image = imageService.findByName(name);
-
-        imageService.delete(image);
-
-        //reroute back to the galleries... im not happy about doing this
+    public String deleteImage(@PathVariable String name, Model model) {
+        String returnPath = "";
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByUserName(auth.getName());
 
-        List<Image> images = imageService.findAllByUser(user);
-        List<String> galleryStrings = new ArrayList<String>();
+        Image image = imageService.findByName(name);
 
-        for (Image image1 : images) {
-            String gallery = image1.getGallery();
-
-            if (!galleryStrings.contains(gallery)) {
-                galleryStrings.add(gallery);
-            }
+        if (user != null && (image.getUser().getId() == user.getId())) {
+            imageService.delete(image);
+            returnPath = "redirect:/mygallery/";
+        } else {
+            model.addAttribute("image", Base64.encodeBase64String(image.getPic()));
+            returnPath = "photo/name";
         }
 
-        modelAndView.addObject("galleries", galleryStrings);
-        modelAndView.setViewName("mygallery");
-        return modelAndView;
+        return returnPath;
     }
 }
